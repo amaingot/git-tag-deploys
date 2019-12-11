@@ -18,58 +18,66 @@ program
   .option("-v, --verbose", "Output all the things")
   .parse(process.argv);
 
-let config = {
-  timestampFormat: "YYYYMMDD-HHMM",
-  envs: [
-    "prod",
-    "staging",
-    "alpha"
-  ]
+interface Config {
+  timestampFormat: string;
+  envs: string[];
 }
+const run = () => {
+  let config: Config = {
+    timestampFormat: "YYYYMMDD-HHMM",
+    envs: []
+  };
 
-try {
-  const customConfig = require("../config.json");
-  if (program.verbose) console.debug(`Found config file: ${customConfig}`)
+  try {
+    const customConfig = require("../config.json");
+    if (program.verbose) console.debug(`Found config file: ${customConfig}`);
 
-  if (customConfig.timestampFormat && typeof customConfig.timestampFormat === "string") {
-    config.timestampFormat = customConfig.timestampFormat
-    if (program.verbose) console.debug(`Config file datetime format string to: ${config.timestampFormat}`)
+    if (customConfig.timestampFormat && typeof customConfig.timestampFormat === "string") {
+      config.timestampFormat = customConfig.timestampFormat;
+      if (program.verbose) console.debug(`Config file datetime format string to: ${config.timestampFormat}`);
+    }
+    if (customConfig.envs && typeof customConfig.envs === "object") {
+      config.envs = customConfig.envs;
+      if (program.verbose) console.debug(`Config file list of envs to ${config.envs}`);
+    }
+  } catch (e) {
+    if (program.verbose) console.debug(`No config found: ${e}`);
   }
-  if (customConfig.envs && typeof customConfig.envs === "object") {
-    config.envs = customConfig.envs
-    if (program.verbose) console.debug(`Config file list of envs to ${config.envs}`)
+
+  let timestampFormat = "YYYYMMDD-HHMM";
+  let developerEnvironment = "dev";
+
+  if (program.environment) {
+    if (typeof program.environment === "string") {
+      developerEnvironment = program.environment;
+      if (program.verbose) console.debug(`User command line tag for env: ${developerEnvironment}`);
+    } else {
+      console.error(chalk.red("You did not specify a valid environment flag"));
+      return -1;
+    }
   }
-} catch (e) {
-  if (program.verbose) console.debug(`No config found: ${e}`)
 
-}
-
-let timestampFormat = "YYYYMMDD-HHMM";
-let developerEnvironment = "dev";
-
-if (program.environment) {
-  if (typeof program.environment === "string") {
-    developerEnvironment = program.environment;
-    if (program.verbose) console.debug(`User command line tag for env: ${developerEnvironment}`)
-  } else {
-    console.log(chalk.red("You did not specify a valid environment flag"));
-    throw 1;
+  if (config.envs.length && !config.envs.includes(developerEnvironment)) {
+    console.error(chalk.red("You specified an environment that isn't on the list!"));
+    return -1;
   }
-}
 
-if (program.format) {
-  timestampFormat = program.format;
-  if (program.verbose) console.debug(`User command line timestamp format: ${timestampFormat}`)
-}
+  if (program.format) {
+    timestampFormat = program.format;
+    if (program.verbose) console.debug(`User command line timestamp format: ${timestampFormat}`);
+  }
 
-const time = moment();
+  const time = moment();
 
-if (program.verbose) console.debug(`Current time is: ${time.format()}`)
+  if (program.verbose) console.debug(`Current time is: ${time.format()}`);
 
-const timestamp = time.format(timestampFormat);
+  const timestamp = time.format(timestampFormat);
 
-const tagString = `${developerEnvironment}/${timestamp}`;
+  const tagString = `${developerEnvironment}/${timestamp}`;
 
-console.log("");
-console.log(chalk.green(tagString));
-console.log("");
+  console.log("");
+  console.log(chalk.green(tagString));
+  console.log("");
+};
+
+run();
