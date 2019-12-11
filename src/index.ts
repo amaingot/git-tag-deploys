@@ -45,7 +45,7 @@ const run = () => {
   }
 
   let timestampFormat = "YYYYMMDD-HHMM";
-  let developerEnvironment = "dev";
+  let developerEnvironment = "prod";
 
   if (program.environment) {
     if (typeof program.environment === "string") {
