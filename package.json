@@ -1,0 +1,35 @@
+{
+  "name": "git-tag-deploys",
+  "version": "1.0.0",
+  "description": "An opinionated way of managing deploys and releases",
+  "main": "./lib/index.js",
+  "bin": {
+    "gtd": "./lib/index.js"
+  },
+  "repository": "git@github.com:amaingot/git-tag-deploys.git",
+  "author": "Alex Maingot <alex@maingot.us>",
+  "license": "MIT",
+  "scripts": {
+    "start": "nodemon --watch 'src/**/*.ts' --exec 'ts-node' src/index.ts",
+    "create": "npm run build && npm run test",
+    "build": "tsc -p .",
+    "test": "npm run build && npm i -g && gtd",
+    "refresh": "rm -rf ./node_modules ./package-lock.json && npm install"
+  },
+  "dependencies": {
+    "chalk": "^3.0.0",
+    "clear": "^0.1.0",
+    "commander": "^4.0.1",
+    "figlet": "^1.2.4",
+    "moment": "^2.24.0",
+    "path": "^0.12.7"
+  },
+  "devDependencies": {
+    "@types/clear": "^0.1.0",
+    "@types/figlet": "^1.2.0",
+    "@types/node": "^12.12.17",
+    "nodemon": "^2.0.2",
+    "ts-node": "^8.5.4",
+    "typescript": "^3.7.3"
+  }
+}
