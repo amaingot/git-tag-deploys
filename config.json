@@ -1,0 +1,8 @@
+{
+  "timestampFormat": "YYYYMMDD-HHMM",
+  "envs": [
+    "prod",
+    "staging",
+    "alpha"
+  ]
+}
