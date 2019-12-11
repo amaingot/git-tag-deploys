@@ -19,7 +19,7 @@ You can configure your plugin if you fork by changing the `./config.json` file.
 With no command line arguments:
 ```
 $ gtd
- __   __                           _____                     ___
+ __   __                           _____                      ___
  \ \ / /   ___    _   _   _ __    |_   _|   __ _    __ _    |_ _|  ___   _
   \ V /   / _ \  | | | | | '__|     | |    / _` |  / _` |    | |  / __| (_)
    | |   | (_) | | |_| | | |        | |   | (_| | | (_| |    | |  \__ \  _
